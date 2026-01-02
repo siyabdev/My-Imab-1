@@ -4,18 +4,18 @@ from base import BaseModel
 import enum
 from datetime import date
 
-#Employee department enum
+#Employee department(enum)
 class EmployeeDepartmentEnum(enum.Enum):
     MANAGEMENT = "management"
     MAINTENANCE = "maintenance"
     COVERING = "covering"
 
-#Employee gender enum
+#Employee gender(enum)
 class EmployeeGenderEnum(enum.Enum):
     MALE = "male"
     FEMALE = "female"
 
-#Employee batch name enum
+#Employee batch name(enum)
 class EmployeeBatchNameEnum(enum.Enum):
     PERMANENT = "Permanent"
     PROBATION = "Probation"
