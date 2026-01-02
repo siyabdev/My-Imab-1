@@ -4,21 +4,27 @@ from base import BaseModel
 import enum
 from datetime import date
 
-class CompanyNameEnum(enum.Enum):
-    ORION = "orion"
-    LYNX = "lynx"
-    ABACARS = "abacars"
-    XIOTS = "xiots"
-
+#Employee department enum
 class EmployeeDepartmentEnum(enum.Enum):
     MANAGEMENT = "management"
     MAINTENANCE = "maintenance"
     COVERING = "covering"
 
+#Employee gender enum
+class EmployeeGenderEnum(enum.Enum):
+    MALE = "male"
+    FEMALE = "female"
+
+#Employee batch name enum
+class EmployeeBatchNameEnum(enum.Enum):
+    PERMANENT = "Permanent"
+    PROBATION = "Probation"
+    TRAINEE = "Trainee"
+
 #Company class
 class Company(BaseModel):
     id = db.Column(db.Integer, primary_key=True)
-    company_name = db.Column(db.Enum(CompanyNameEnum, name="company_name_enum"),nullable=False)
+    company_name = db.Column(db.String(120), nullable=False)
     company_email = db.Column(db.String(120), nullable=False)
     company_joined = db.Column(db.Date, nullable=False)
     company_address = db.Column(db.String(120), nullable=False)
@@ -26,7 +32,7 @@ class Company(BaseModel):
     def to_dict(self):
         return {
             "id": self.id,
-            "company_name": self.company_name.value,
+            "company_name": self.company_name,
             "company_email": self.company_email,
             "company_joined": self.company_joined.isoformat(),
             "company_address": self.company_address
@@ -48,7 +54,7 @@ class Employee(BaseModel):
     employee_phone_number_secondary = db.Column(db.String(120), nullable=True)
     employee_dob = db.Column(db.Date, nullable=False)
     employee_cnic = db.Column(db.String(120), nullable=False)
-    employee_gender = db.Column(db.String(120), nullable=False)
+    employee_gender = db.Column(db.Enum(EmployeeGenderEnum, name="employee_gender_enum"), nullable=False)
     employee_address_permanent = db.Column(db.String(120), nullable=False)
     employee_address_current = db.Column(db.String(120), nullable=False)
 
@@ -69,7 +75,7 @@ class Employee(BaseModel):
             "employee_phone_number_secondary": self.employee_phone_number_secondary,
             "employee_dob": self.employee_dob.isoformat(),
             "employee_cnic": self.employee_cnic,
-            "employee_gender": self.employee_gender,
+            "employee_gender": self.employee_gender.value,
             "employee_address_permanent": self.employee_address_permanent,
             "employee_address_current": self.employee_address_current
     }
@@ -83,8 +89,7 @@ class Payroll(BaseModel):
     id = db.Column(db.Integer, primary_key = True)
     employee_id = db.Column(db.Integer, db.ForeignKey('employee.id'), nullable=False)
     company_id = db.Column(db.Integer, db.ForeignKey('company.id'), nullable=False)
-    company_name = db.Column(db.Enum(CompanyNameEnum, name="company_name_enum"),nullable=False)
-    batch_name = db.Column(db.String(120), nullable=False)
+    batch_name = db.Column(db.Enum(EmployeeBatchNameEnum, name="employee_batch_name_enum"), nullable=False)
     batch_status = db.Column(db.String(120), nullable=False)
     employee_basic_salary = db.Column(db.Integer, nullable=False)
     employee_hourly_rate = db.Column(db.Integer, nullable=False)
@@ -107,6 +112,7 @@ class Payroll(BaseModel):
     __table_args__ = (
     UniqueConstraint("employee_id", name="unique_employee_id"),
     UniqueConstraint("company_id", name="unique_company_id"),
+    UniqueConstraint("batch_name", name="unique_batch_name")
     )
 
     def to_dict(self):
@@ -114,8 +120,7 @@ class Payroll(BaseModel):
             "id": self.id,
             "employee_id": self.employee_id,
             "company_id": self.company_id,
-            "company_name": self.company_name.value,
-            "batch_name": self.batch_name,
+            "batch_name": self.batch_name.value,
             "batch_status": self.batch_status,
             "employee_basic_salary": self.employee_basic_salary,
             "employee_hourly_rate": self.employee_hourly_rate,
