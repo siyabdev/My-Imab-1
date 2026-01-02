@@ -1,5 +1,6 @@
 from database import db
 from sqlalchemy import UniqueConstraint, Enum
+from sqlalchemy.orm import relationship
 from base import BaseModel
 import enum
 from datetime import date
@@ -90,6 +91,8 @@ class Payroll(BaseModel):
     employee_id = db.Column(db.Integer, db.ForeignKey('employee.id'), nullable=False)
     company_id = db.Column(db.Integer, db.ForeignKey('company.id'), nullable=False)
     batch_name = db.Column(db.Enum(EmployeeBatchNameEnum, name="employee_batch_name_enum"), nullable=False)
+    employee = relationship("Employee", foreign_keys=[employee_id])
+    company = relationship("Company", foreign_keys=[company_id])
     batch_status = db.Column(db.String(120), nullable=False)
     employee_basic_salary = db.Column(db.Integer, nullable=False)
     employee_hourly_rate = db.Column(db.Integer, nullable=False)

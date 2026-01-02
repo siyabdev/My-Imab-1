@@ -81,6 +81,21 @@ class PayrollResponse:
         self.leaves = payroll.leaves
         self.bonus1 = payroll.bonus1
         self.bonus2 = payroll.bonus2
+        # Check if employee relationship is loaded
+        if hasattr(payroll, 'employee') and payroll.employee:
+            self.employee_name = payroll.employee.employee_name
+            self.employee_status = payroll.employee.employee_status
+            self.employee_department = payroll.employee.employee_department.value if payroll.employee.employee_department else None
+        else:
+            self.employee_name = None
+            self.employee_status = None
+            self.employee_department = None
+        
+        # Check if company relationship is loaded
+        if hasattr(payroll, 'company') and payroll.company:
+            self.company_name = payroll.company.company_name
+        else:
+            self.company_name = None
 
     def to_dict(self):
         return {
@@ -95,7 +110,11 @@ class PayrollResponse:
             "late": self.late,
             "leaves": self.leaves,
             "bonus1": self.bonus1,
-            "bonus2": self.bonus2
+            "bonus2": self.bonus2,
+            "employee_name": self.employee_name,
+            "employee_status": self.employee_status,
+            "employee_department": self.employee_department,
+            "company_name": self.company_name
         }
 
 class PayrollListResponse:
