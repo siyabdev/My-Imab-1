@@ -1,44 +1,61 @@
+from flask import current_app
 import enum
 
-class RoleType(enum.Enum):
-    admin = 'admin'
-    manager = 'manager'
-    guest = 'guest'
+#Employee department(enum)
+class EmployeeDepartmentEnum(enum.Enum):
+    MANAGEMENT = "management"
+    MAINTENANCE = "maintenance"
+    COVERING = "covering"
 
+#Employee gender(enum)
+class EmployeeGenderEnum(enum.Enum):
+    MALE = "male"
+    FEMALE = "female"
+
+#Create employee(class) request
 class CreateEmployeeRequest:
     def __init__(self, data):
-        self.name = data.get("name")
-        self.email = data.get("email")
-        self.username = data.get("username")
-        self.password = data.get("password")
-        self.role = data.get("role", "guest")
+        self.employee_company_id = data.get("employee_company_id"),
+        self.employee_name = data.get("employee_name"),
+        self.employee_status = data.get("employee_status"),
+        self.employee_department = data.get("employee_department"),
+        self.employee_email = data.get("employee_email"),
+        self.employee_phone_number_main = data.get("employee_phone_number_main"),
+        self.employee_phone_number_secondary = data.get("employee_phone_number_secondary"),
+        self.employee_dob = data.get("employee_dob"),
+        self.employee_cnic = data.get("employee_cnic"),
+        self.employee_gender = data.get("employee_gender"),
+        self.employee_address_permanent = data.get("employee_address_permanent"),
+        self.employee_address_current = data.get("employee_address_current")
 
     def is_valid(self):
         # Required fields
-        if not all([self.name, self.email, self.username, self.password, self.role]):
+        if not all([self.employee_company_id, self.employee_name, self.employee_status, self.employee_department, self.employee_email, self.employee_phone_number_main, self.employee_phone_number_secondary, self.employee_dob, self.employee_cnic, self.employee_gender, self.employee_address_permanent, self.employee_address_current]):
+            current_app.logger.error("Missing required fields.")
             return False, "Missing required fields."
 
-        # Validate username length
-        if len(self.username) < 6:
-            return False, "Username must be at least 6 characters long."
-
-        # Validate password length
-        if len(self.password) < 6:
-            return False, "Password must be at least 6 characters long."
-
-        # Validate role against enum
-        if self.role not in [role.value for role in RoleType]:
-            return False, "Invalid role provided."
+        # Validate employee department against enum
+        if self.employee_department not in [employee_department.value for employee_department in EmployeeDepartmentEnum]:
+            current_app.logger.error("Invalid employee department provided.")
+            return False, "Invalid employee department provided."
 
         return True, None
 
+#Update employee(class) request
 class UpdateEmployeeRequest:
     def __init__(self, data):
-        self.username = data.get("username")
-        self.name = data.get("name")
-        self.email = data.get("email")
-        self.password = data.get("password")
-        self.role = data.get("role")
+        self.employee_company_id = data.get("employee_company_id"),
+        self.employee_name = data.get("employee_name"),
+        self.employee_status = data.get("employee_status"),
+        self.employee_department = data.get("employee_department"),
+        self.employee_email = data.get("employee_email"),
+        self.employee_phone_number_main = data.get("employee_phone_number_main"),
+        self.employee_phone_number_secondary = data.get("employee_phone_number_secondary"),
+        self.employee_dob = data.get("employee_dob"),
+        self.employee_cnic = data.get("employee_cnic"),
+        self.employee_gender = data.get("employee_gender"),
+        self.employee_address_permanent = data.get("employee_address_permanent"),
+        self.employee_address_current = data.get("employee_address_current")
 
     def is_valid(self):
 
