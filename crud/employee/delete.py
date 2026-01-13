@@ -9,7 +9,11 @@ def delete_employee_crud(id):
         delete_query = Employee.query.filter_by(id=id).first()
         db.session.delete(delete_query)
         db.session.commit()
-        return delete_query
+
+        if delete_query:
+            return delete_query
+        else:
+            return delete_query
     
     except IntegrityError as error:
         current_app.logger.error(f"Integrity error {error}.")

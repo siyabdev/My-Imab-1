@@ -11,7 +11,6 @@ def verify_login(username, password):
         return None
     
     try:
-
         if login.password == password:
             current_app.logger.info(f"Employee {login} returned.")
             return login

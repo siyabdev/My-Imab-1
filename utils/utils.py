@@ -1,8 +1,17 @@
 from flask import current_app
-from models import Employee
-from models import Payroll
+from models import Company, Employee, Payroll
 from sqlalchemy.orm import joinedload
 from sqlalchemy.exc import IntegrityError
+
+#Get company(class)
+def get_company(id):
+    company = Company.query.filter_by(id=id).first()
+    return company
+
+#Verify company(class)
+def verify_company(company_name, company_email):
+    company = Company.query.filter_by(company_name=company_name, company_email=company_email).first()
+    return company
 
 #Get employee(class)
 def get_employee(id):
