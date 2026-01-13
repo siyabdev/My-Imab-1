@@ -5,7 +5,7 @@ from auth import generate_token
 from sqlalchemy.exc import IntegrityError
 
 #Create blueprint for login
-login_bp = Blueprint("login_bp", __name__, url_prefix="/employee")
+login_bp = Blueprint("login_bp", __name__ , url_prefix="/employee")
 
 #Login
 @login_bp.route("/login", methods=["POST"])
@@ -20,7 +20,7 @@ def login():
             "message": f"Login schema error occured {message}.."
         }), 400
     
-    employee = verify_login(data.username, data.password)
+    employee = verify_login(username=data.username, password=data.password)
     
     if not employee:
         current_app.logger.error(f"Login failed for username '{data.username}'.")
@@ -30,9 +30,9 @@ def login():
         }), 401
     
     try:
-        token = generate_token(employee.id, employee.username)
+        token = generate_token(employee.employee_id, employee.username)
         
-        response = LoginResponse(token, employee.id, employee.username)
+        response = LoginResponse(token, employee.employee_id, employee.username)
 
         current_app.logger.info(f"Login successful for username '{data.username}'.")
         return jsonify({

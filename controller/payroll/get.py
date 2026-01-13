@@ -12,16 +12,16 @@ payroll_get_bp = Blueprint("payroll_get_bp", __name__, url_prefix="/payroll")
 def get_payroll():
     data = request.json
     employee_id = data.get("employee_id")
-    batch = data.get("batch")
+    batch_name = data.get("batch_name")
 
-    if not employee_id or not batch:
-        current_app.logger.error(f"No employee id {employee_id} and batch {batch}.")
+    if not employee_id or not batch_name:
+        current_app.logger.error(f"No employee id {employee_id} and batch name {batch_name}.")
         return jsonify({
-            "code":"NO_EMPLOYEE_ID_OR_BATCH_PROVIDED",
-            "message":f"Please enter employee id {employee_id} and batch {batch}."
+            "code":"NO_EMPLOYEE_ID_OR_BATCH_NAME_PROVIDED",
+            "message":f"Please enter employee id {employee_id} and batch name {batch_name}."
         }), 403
     
-    payroll = get_payroll_crud(employee_id=employee_id, batch=batch)
+    payroll = get_payroll_crud(employee_id=employee_id, batch_name=batch_name)
 
     try:
         if payroll:
@@ -29,10 +29,10 @@ def get_payroll():
             return PayrollResponse(payroll).to_dict()
         
         else:
-            current_app.logger.error(f"Employee id {employee_id} or batch {batch} doesnt exist.")
+            current_app.logger.error(f"Employee id {employee_id} or batch name {batch_name} doesnt exist.")
             return jsonify({
-                "code":"EMPLOYEE_ID_OR_BATCH_DOESNT_EXIST",
-                "message": f"Please try another employee_id or batch, {employee_id}, '{batch}' not registered"
+                "code":"EMPLOYEE_ID_OR_BATCH_NAME_DOESNT_EXIST",
+                "message": f"Please try another employee id or batch name, {employee_id}, '{batch_name}' not registered"
             }), 403
         
     except IntegrityError as error:

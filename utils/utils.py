@@ -14,6 +14,11 @@ def verify_employee(employee_name, employee_email, employee_cnic):
     employee = Employee.query.filter_by(employee_name=employee_name, employee_email=employee_email, employee_cnic=employee_cnic).first()
     return employee
 
+#Verify payroll(class)
+def verify_payroll(id):
+    payroll = Payroll.query.filter_by(id=id).first()
+    return payroll
+
 #Get payroll(class)
 def get_payroll(employee_id, batch_name):
     try:

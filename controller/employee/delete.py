@@ -29,11 +29,11 @@ def delete_employee():
         current_app.logger.info(f"Employee {employee} doesnt exist.")
         return jsonify({
             "code": "EMPLOYEE_DOESNT_EXIST",
-            "message": f"Employee '{employee}' doesnt exist, please enter a valid employee id."
+            "message": f"Employee '{employee}' doesnt exist, please enter a valid employee ID."
         })
 
     try:
-        delete_query = delete_employee_crud(data.id)
+        delete_query = delete_employee_crud(id=data.id)
         if delete_query:
             current_app.logger.info(f"Employee '{data.id}' deleted.")
             return jsonify({

@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify, current_app
 from crud.payroll.delete import delete_payroll_crud
-from utils.utils import get_payroll
+from utils.utils import verify_payroll
 from sqlalchemy.exc import IntegrityError
 from schemas.payroll import DeletePayrollRequest
 from auth import require_auth
@@ -21,21 +21,21 @@ def delete_payroll():
             "message": f"Schema error occured {message}."
         }), 400
 
-    payroll = get_payroll(data.employee_id, data.batch)
+    payroll = verify_payroll(data.id)
 
     if not payroll:
         current_app.logger.info(f"Payroll {payroll} doesnt exist.")
         return jsonify({
             "code": "PAYROLL_DOESNT_EXIST",
-            "message": f"Payroll {payroll} doesnt exist, please enter a valid employee id {data.employee_id} and batch '{data.batch}'."
+            "message": f"Payroll {payroll} doesnt exist. Please enter a valid payroll ID."
         })
     try:
-        delete_query = delete_payroll_crud(employee_id=data.employee_id, batch=data.batch)
+        delete_query = delete_payroll_crud(id=data.id)
         if delete_query:
             current_app.logger.info(f"Payroll {payroll} deleted.")
             return jsonify({
                     "code": "PAYROLL_DELETED",
-                    "message": f"Payroll {data.employee_id}, '{data.batch}' is deleted."
+                    "message": f"Payroll with ID {data.id} is deleted."
                 })
     
     except IntegrityError as error:
