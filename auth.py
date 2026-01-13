@@ -3,13 +3,14 @@ from flask import request, jsonify, current_app
 import jwt
 from datetime import datetime, timedelta
 
-SECRET_KEY = "siyabiqbaljibran"
+SECRET_KEY = "siyabhamzawebdev"
 
-def generate_token(user_id, username):
+#Generate token
+def generate_token(employee_id, username):
     expiration = datetime.utcnow() + timedelta(hours=24)
     
     payload = {
-        "user_id" : user_id,
+        "employee_id" : employee_id,
         "username" : username,
         "exp" : expiration
     }
@@ -20,6 +21,7 @@ def generate_token(user_id, username):
         token = token.decode("utf-8")
     return token
 
+#Verify token
 def verify_token(token):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
@@ -31,6 +33,7 @@ def verify_token(token):
         current_app.logger.error(f"Invalid token error {jwt.InvalidTokenError}.")
         return None
 
+#Authentication
 def require_auth(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
@@ -42,7 +45,6 @@ def require_auth(f):
                 "code" : "NO_TOKEN",
                 "message" : "No token provided. Please login first."
             }), 401
-        
         try:
             token = auth_header.split(' ')[1]
         except IndexError:
@@ -61,7 +63,7 @@ def require_auth(f):
                 "message": f"Token {token} is invalid or expired. Please login again."
             }), 401
         
-        request.user_id = payload["user_id"]
+        request.employee_id = payload["employee_id"]
         request.username = payload["username"]
         
         return f(*args, **kwargs)

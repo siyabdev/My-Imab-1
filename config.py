@@ -2,14 +2,14 @@ import os
 from dotenv import load_dotenv
 import logging
 
-# Load .env
+#Load .env
 load_dotenv()
 
 class Config:
-    # Flask mode
+    #Flask mode
     DEBUG = os.getenv("FLASK_ENV") == "development"
 
-    # Database settings
+    #Database settings
     DB_USER = os.getenv("DB_USER")
     DB_PASSWORD = os.getenv("DB_PASSWORD")
     DB_HOST = os.getenv("DB_HOST")
@@ -24,5 +24,5 @@ class Config:
 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-    # Logging
+    #Logging
     LOG_LEVEL = getattr(logging, "INFO")

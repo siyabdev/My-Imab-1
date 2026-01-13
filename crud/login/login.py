@@ -1,16 +1,28 @@
 from flask import current_app
-from models import Employee
+from models import Login
+from sqlalchemy.exc import IntegrityError
 
+#Verifying login
 def verify_login(username, password):
-    employee = Employee.query.filter_by(username=username).first()
+    login = Login.query.filter_by(username=username).first()
     
-    if not employee:
-        current_app.logger.info(f"No employee {employee }.")
+    if not login:
+        current_app.logger.info(f"No employee {login }.")
         return None
     
-    if employee.password == password:
-        current_app.logger.info(f"Employee {employee} returned.")
-        return employee
+    try:
+
+        if login.password == password:
+            current_app.logger.info(f"Employee {login} returned.")
+            return login
+        
+        return None
     
-    return None
+    except IntegrityError as error:
+        current_app.logger.error(f"Integrity error {error}.")
+        raise error
+    
+    except Exception as e:
+        current_app.logger.error(f"Exceptional error {e}.")
+        raise e
 

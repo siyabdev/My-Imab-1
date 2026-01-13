@@ -1,14 +1,14 @@
 from flask import Blueprint, request, jsonify, current_app
 from crud.employee.create import create_employee_crud
-from utils.utils import get_employee
+from utils.utils import verify_employee
 from sqlalchemy.exc import IntegrityError
 from schemas.employee import CreateEmployeeRequest, EmployeeResponse
 from auth import require_auth
 
-create_bp = Blueprint("create_bp", __name__, url_prefix="/employee")
+employee_create_bp = Blueprint("employee_create_bp", __name__, url_prefix="/employee")
 
 #Create employee
-@create_bp.route("/create", methods=["POST"])
+@employee_create_bp.route("/create", methods=["POST"])
 @require_auth
 def create_employee():
     data = CreateEmployeeRequest(request.json)
@@ -21,22 +21,29 @@ def create_employee():
             "message": f"Schema error occured {message}."
         }), 400
     
-    employee_by_username = get_employee(data.username)
+    employee = verify_employee(data.employee_name, data.employee_email, data.employee_cnic)
 
-    if employee_by_username:
-        current_app.logger.info(f"Employee already exists. '{employee_by_username}'")
+    if employee:
+        current_app.logger.info(f"Employee already exists. '{employee}'")
         return jsonify({
             "code": "EMPLOYEE_ALREADY_EXISTS",
-            "message": f"This username '{data.username}' already exists, try a new one."
+            "message": f"This employee '{employee}' already exists, try a new one."
         }), 403
     
     try:
         new_employee = create_employee_crud(
-            name=data.name,
-            email=data.email,
-            username=data.username,
-            password=data.password,
-            role=data.role
+            employee_company_id = data.employee_company_id,
+            employee_name = data.employee_name,
+            employee_status = data.employee_status,
+            employee_department = data.employee_department,
+            employee_email = data.employee_email,
+            employee_phone_number_main = data.employee_phone_number_main,
+            employee_phone_number_secondary = data.employee_phone_number_secondary,
+            employee_dob = data.employee_dob,
+            employee_cnic = data.employee_cnic,
+            employee_gender = data.employee_gender,
+            employee_address_permanent = data.employee_address_permanent,
+            employee_address_current = data.employee_address_current
         )
 
         current_app.logger.info(f"employee {new_employee} created.")

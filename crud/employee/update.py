@@ -4,28 +4,47 @@ from utils.utils import get_employee
 from sqlalchemy.exc import IntegrityError
 
 #Update employee
-def update_employee_crud(username, name, email, role, password):
-    employee = get_employee(username)
+def update_employee_crud(id, employee_name, employee_status, employee_department, employee_email, employee_phone_number_main, employee_phone_number_secondary, employee_dob, employee_cnic, employee_gender, employee_address_permanent, employee_address_current):
+    employee = get_employee(id)
 
     if not employee:
         return employee == False
     try:
-        # Update any fields provided
-        if name:
-            employee.name = name
+        #Update any fields provided
+        if employee_name:
+            employee.employee_name = employee_name
         
-        if email:
-            employee.email = email
+        if employee_status:
+            employee.employee_status = employee_status
         
-        if role:
-            employee.role = role
+        if employee_department:
+            employee.employee_department = employee_department
         
-        if password:
-            employee.password = password
+        if employee_email:
+            employee.employee_email = employee_email
+        
+        if employee_phone_number_main:
+            employee.employee_phone_number_main = employee_phone_number_main
+        
+        if employee_phone_number_secondary:
+            employee.employee_phone_number_secondary = employee_phone_number_secondary
+        
+        if employee_dob:
+            employee.employee_dob = employee_dob
+        
+        if employee_cnic:
+            employee.employee_cnic = employee_cnic
+        
+        if employee_gender:
+            employee.employee_gender = employee_gender
+        
+        if employee_address_permanent:
+            employee.employee_address_permanent = employee_address_permanent
+        
+        if employee_address_current:
+            employee.employee_address_current = employee_address_current
 
         db.session.commit()
-
-        print("inserted into database")
 
         return employee
     

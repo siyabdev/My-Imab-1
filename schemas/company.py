@@ -1,5 +1,4 @@
 from flask import current_app
-import enum
 
 #Create company(class) request 
 class CreateCompanyRequest:
@@ -10,7 +9,7 @@ class CreateCompanyRequest:
         self.company_address = data.get("company_address")
 
     def is_valid(self):
-        # Required fields
+        #Required fields
         if not all([self.company_name, self.company_email, self.company_joined, self.company_address]):
             current_app.logger.error("Missing required fields.")
             return False, "Missing required fields."
@@ -29,7 +28,7 @@ class UpdateCompanyRequest:
     def is_valid(self):
 
         if not self.id:
-            current_app.logger.error("Missing required fields.")
+            current_app.logger.error("Company id missing. Please provide company id.")
             return False, "Company id missing. Please provide company id."
         
         return True, None
@@ -40,23 +39,30 @@ class UpdateCompanyRequest:
 #Delete company(class) request
 class DeleteCompanyRequest:
     def __init__(self, data):
-        self = data.get("")
+        self.id = data.get("id")
 
     def is_valid(self):
-        if not ([self]):
-            return False, ""
+        if not (self.id):
+            current_app.logger.error("Company ID doesnt exist.")
+            return False, "Company ID doesnt exist."
         
         return True, None
 
 #Company(class) response
 class CompanyResponse:
     def __init__(self, data):
-        self.id = data.get("id")
-        self.company_name = data.get("company_name")
-        self.company_email = data.get("company_email")
-        self.company_joined = data.get("company_joined")
-        self.company_address = data.get("company_address")
+        self.id = data.id
+        self.company_name = data.company_name
+        self.company_email = data.company_email
+        self.company_joined = data.company_joined
+        self.company_address = data.company_address
 
+    def is_valid(self):
+
+        if not self.id:
+            current_app.logger.error("Company id missing. Please provide company id.")
+            return False, "Company id missing. Please provide company id."
+        
     def to_dict(self):
         return {
             "id": self.id,
@@ -69,8 +75,8 @@ class CompanyResponse:
 #Company(class) short response
 class CompanyShortResponse:
     def __init__(self, data):
-        self.id= data.get("id")
-        self.company_name = data.get("company_name")
+        self.id= data.id
+        self.company_name = data.company_name
     
     def to_dict(self):
         return{

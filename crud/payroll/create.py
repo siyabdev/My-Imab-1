@@ -4,21 +4,31 @@ from models import Payroll
 from sqlalchemy.exc import IntegrityError
 
 #Create payroll
-def create_payroll_crud(employee_id, batch, basic_salary, hourly_rate, monthly_hours, worked_hours, early, late, leaves, bonus1, bonus2):
+def create_payroll_crud(employee_id, employee_company_id, batch_name, batch_status, employee_basic_salary, employee_hourly_rate, employee_contract_hours, employee_rota_hours, employee_worked_hours, employee_net_hours, employee_over_below, employee_lates, employee_early, employee_leaves, employee_score, total_addition, total_deduction, total_gross, total_tax, employee_total_net, total_net_orion):
 
     try:
         create_query = Payroll(
             employee_id = employee_id,
-            batch = batch,
-            basic_salary = basic_salary,
-            hourly_rate = hourly_rate,
-            monthly_hours = monthly_hours,
-            worked_hours = worked_hours,
-            early = early,
-            late = late,
-            leaves = leaves,
-            bonus1 = bonus1,
-            bonus2 = bonus2
+            employee_company_id = employee_company_id,
+            batch_name = batch_name,
+            batch_status = batch_status,
+            employee_basic_salary = employee_basic_salary,
+            employee_hourly_rate = employee_hourly_rate,
+            employee_contract_hours = employee_contract_hours,
+            employee_rota_hours = employee_rota_hours,
+            employee_worked_hours = employee_worked_hours,
+            employee_net_hours = employee_net_hours,
+            employee_over_below = employee_over_below,
+            employee_lates = employee_lates,
+            employee_early = employee_early,
+            employee_leaves = employee_leaves,
+            employee_score = employee_score,
+            total_addition = total_addition,
+            total_deduction = total_deduction,
+            total_gross = total_gross,
+            total_tax = total_tax,
+            employee_total_net = employee_total_net,
+            total_net_orion = total_net_orion
         )
         
         db.session.add(create_query)
@@ -33,4 +43,3 @@ def create_payroll_crud(employee_id, batch, basic_salary, hourly_rate, monthly_h
     except Exception as e:
         current_app.logger.error(f"Exceptional error {e}.")
         raise e
-

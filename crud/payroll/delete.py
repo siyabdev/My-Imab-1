@@ -4,9 +4,9 @@ from models import Payroll
 from sqlalchemy.exc import IntegrityError
 
 #Delete payroll
-def delete_payroll_crud(employee_id, batch):
+def delete_payroll_crud(id):
     try:
-        delete_query = Payroll.query.filter_by(employee_id=employee_id, batch=batch).first()
+        delete_query = Payroll.query.filter_by(id=id).first()
         db.session.delete(delete_query)
         db.session.commit()
     

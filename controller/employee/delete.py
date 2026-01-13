@@ -5,14 +5,16 @@ from sqlalchemy.exc import IntegrityError
 from schemas.employee import DeleteEmployeeRequest
 from auth import require_auth
 
-delete_bp = Blueprint("delete_bp", __name__, url_prefix="/employee")
+employee_delete_bp = Blueprint("employee_delete_bp", __name__, url_prefix="/employee")
 
 #Delete employee
-@delete_bp.route("/delete", methods=["DELETE"])
+@employee_delete_bp.route("/delete", methods=["DELETE"])
 @require_auth
 def delete_employee():
     data = DeleteEmployeeRequest(request.json)
     valid, message = data.is_valid()
+
+    print(data)
 
     if not valid:
         current_app.logger.error(f"Schema error {message}.")
@@ -21,22 +23,22 @@ def delete_employee():
             "message": f"Schema error occured {message}."
         }), 400
 
-    employee_by_username = get_employee(data.username)
+    employee = get_employee(data.id)
 
-    if not employee_by_username:
-        current_app.logger.info(f"Employee {employee_by_username} doesnt exist.")
+    if not employee:
+        current_app.logger.info(f"Employee {employee} doesnt exist.")
         return jsonify({
             "code": "EMPLOYEE_DOESNT_EXIST",
-            "message": f"Employee '{data.username}' doesnt exist, please enter a valid username."
+            "message": f"Employee '{employee}' doesnt exist, please enter a valid employee id."
         })
 
     try:
-        delete_query = delete_employee_crud(data.username)
+        delete_query = delete_employee_crud(data.id)
         if delete_query:
-            current_app.logger.info(f"Employee '{data.username}' deleted.")
+            current_app.logger.info(f"Employee '{data.id}' deleted.")
             return jsonify({
                 "code": "EMPLOYEE_DELETED",
-                "message": f"Employee '{data.username}' is deleted."
+                "message": f"Employee '{data.id}' is deleted."
             }), 200
         
     except IntegrityError as error:

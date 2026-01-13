@@ -5,19 +5,18 @@ from models import Employee
 from sqlalchemy.exc import IntegrityError
 
 #Get employee
-def get_employee_crud(username):
+def get_employee_crud(id):
     try:
-        employee = get_employee(username)
-        print(f"employee:{employee}")
+        employee = get_employee(id)
         return employee
     
     except IntegrityError as error:
         current_app.logger.error(f"Integrity error {error}.")
-        return error
+        raise error
     
     except Exception as e:
         current_app.logger.error(f"Exceptional error {e}.")
-        return e
+        raise e
 
 #Get all employees
 def get_employees_crud():
@@ -28,16 +27,16 @@ def get_employees_crud():
 
     except IntegrityError as error:
         current_app.logger.error(f"Integrity error {error}.")
-        return error
+        raise error
     
     except Exception as e:
         current_app.logger.error(f"Exceptional error {e}.")
-        return e
+        raise e
 
 #Get short details (employee)
-def get_employee_short_crud():
+def get_employees_short_crud():
     try:
-        employees = Employee.query.with_entities(Employee.id, Employee.name).all()
+        employees = Employee.query.with_entities(Employee.id, Employee.employee_name, Employee.employee_status, Employee.employee_department).all()
         db.session.commit()
         return employees
     

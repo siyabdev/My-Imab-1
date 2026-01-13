@@ -1,5 +1,5 @@
 from database import db
-from sqlalchemy import UniqueConstraint, Enum
+from sqlalchemy import UniqueConstraint,CheckConstraint, Enum
 from sqlalchemy.orm import relationship
 from base import BaseModel
 import enum
@@ -21,6 +21,31 @@ class EmployeeBatchNameEnum(enum.Enum):
     PERMANENT = "Permanent"
     PROBATION = "Probation"
     TRAINEE = "Trainee"
+
+#Login class
+class Login(BaseModel):
+    id = db.Column(db.Integer, primary_key=True)
+    employee_id = db.Column(db.Integer, db.ForeignKey('employee.id'), nullable=False)
+    username = db.Column(db.String(120), nullable=False)
+    password = db.Column(db.String(120), nullable=True)
+
+    __table_args__ = (
+    UniqueConstraint("username", name="unique_employee_username"),
+    CheckConstraint("length(username) > 6", name="check_username_min_length"),
+    CheckConstraint("length(password) > 8", name="check_password_min_length"),
+    )
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "employee_id": self.employee_id,
+            "username": self.username,
+            "password": self.password
+    }
+
+    @classmethod
+    def to_dict_list(cls, logins):
+        return [log.to_dict() for log in logins]
 
 #Company class
 class Company(BaseModel):
@@ -62,8 +87,9 @@ class Employee(BaseModel):
     __table_args__ = (
     UniqueConstraint("employee_email", name="unique_employee_email"),
     UniqueConstraint("employee_phone_number_main", name="unique_employee_phone_number_main"),
-    UniqueConstraint("employee_cnic", name="unique_employee_cnic"),
-)
+    UniqueConstraint("employee_cnic", name="unique_employee_cnic")
+    )
+
     def to_dict(self):
         return {
             "id": self.id,
@@ -117,7 +143,23 @@ class Payroll(BaseModel):
     __table_args__ = (
     UniqueConstraint("employee_id", name="unique_employee_id"),
     UniqueConstraint("company_id", name="unique_company_id"),
-    UniqueConstraint("batch_name", name="unique_batch_name")
+    UniqueConstraint("batch_name", name="unique_batch_name"),
+    CheckConstraint("employee_basic_salary >= 0", name="min_employee_basic_salary_check"),
+    CheckConstraint("employee_hourly_rate >= 0", name="min_employee_hourly_rate_check"),
+    CheckConstraint("employee_contract_hours >= 0", name="min_employee_contract_hours_check"),
+    CheckConstraint("employee_rota_hours >= 0", name="min_employee_rota_hours_check"),
+    CheckConstraint("employee_worked_hours >= 0", name="min_employee_worked_hours_check"),
+    CheckConstraint("employee_net_hours >= 0", name="min_employee_net_hours_check"),
+    CheckConstraint("employee_lates >= 0", name="min_employee_lates_check"),
+    CheckConstraint("employee_early >= 0", name="min_employee_early_check"),
+    CheckConstraint("employee_leaves >= 0", name="min_employee_leaves_check"),
+    CheckConstraint("employee_score >= 0", name="min_employee_score_check"),
+    CheckConstraint("total_addition >= 0", name="min_total_addition_check"),
+    CheckConstraint("total_deduction >= 0", name="min_total_deduction_check"),
+    CheckConstraint("total_gross >= 0", name="min_total_gross_check"),
+    CheckConstraint("total_tax >= 0", name="min_total_tax_check"),
+    CheckConstraint("employee_total_net >= 0", name="min_employee_total_net_check"),
+    CheckConstraint("total_net_orion >= 0", name="min_total_net_orion_check"),
     )
 
     def to_dict(self):
@@ -143,7 +185,7 @@ class Payroll(BaseModel):
             "total_gross": self.total_gross,
             "total_tax": self.total_tax,
             "employee_total_net": self.employee_total_net,
-            "total_net_orion": self.total_net_orion,
+            "total_net_orion": self.total_net_orion
     }
     
     @classmethod

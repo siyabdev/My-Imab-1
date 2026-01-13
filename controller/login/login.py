@@ -5,7 +5,7 @@ from auth import generate_token
 from sqlalchemy.exc import IntegrityError
 
 #Create blueprint for login
-login_bp = Blueprint("login_bp", __name__)
+login_bp = Blueprint("login_bp", __name__, url_prefix="/employee")
 
 #Login
 @login_bp.route("/login", methods=["POST"])

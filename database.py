@@ -6,7 +6,6 @@ def init_db(app):
     db.init_app(app)
     with app.app_context():
         db.create_all()
-        print("Database initialized.")
 
 def close_db(error=None):
-    pass  # SQLAlchemy handles closing automatically
+    pass

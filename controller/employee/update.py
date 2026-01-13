@@ -5,10 +5,10 @@ from sqlalchemy.exc import IntegrityError
 from schemas.employee import UpdateEmployeeRequest, EmployeeResponse
 from auth import require_auth
 
-update_bp = Blueprint("update_bp", __name__, url_prefix="/employee")
+employee_update_bp = Blueprint("employee_update_bp", __name__, url_prefix="/employee")
 
 #Update employee
-@update_bp.route("/update", methods=["PUT"])
+@employee_update_bp.route("/update", methods=["PUT"])
 @require_auth
 def update_employee():
     data = UpdateEmployeeRequest(request.json)
@@ -28,7 +28,7 @@ def update_employee():
             "message": "Required fields for data update are not provided."
         }), 400
     
-    employee = get_employee(data.username)
+    employee = get_employee(data.id)
     if not employee:
         current_app.logger.error(f"Employee {employee} not found.")
         return jsonify({
@@ -37,7 +37,7 @@ def update_employee():
         }), 404
 
     try:        
-        updated_employee = update_employee_crud(username=data.username, name=data.name, password=data.password, role=data.role, email=data.email)
+        updated_employee = update_employee_crud(id=data.id, employee_name=data.employee_name, employee_status=data.employee_status, employee_department=data.employee_department, employee_email=data.employee_email, employee_phone_number_main=data.employee_phone_number_main, employee_phone_number_secondary=data.employee_phone_number_secondary, employee_dob=data.employee_dob, employee_cnic=data.employee_cnic, employee_gender=data.employee_gender, employee_address_permanent=data.employee_address_permanent, employee_address_current=data.employee_address_current)
         current_app.logger.info(f"Employee updated {updated_employee}.")
         return jsonify({
             "code": "EMPLOYEE_UPDATED",

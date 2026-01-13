@@ -1,26 +1,26 @@
 from flask import Blueprint, request, jsonify, current_app
-from crud.employee.get import get_employee_crud, get_employees_crud, get_employee_short_crud
+from crud.employee.get import get_employee_crud, get_employees_crud, get_employees_short_crud
 from schemas.employee import EmployeeResponse, EmployeeListResponse, EmployeeShortResponse
 from sqlalchemy.exc import IntegrityError
 from auth import require_auth
 
-get_bp = Blueprint("get_bp", __name__, url_prefix="/employee")
+employee_get_bp = Blueprint("employee_get_bp", __name__, url_prefix="/employee")
 
 #Get employee
-@get_bp.route("/get", methods=["GET"])
+@employee_get_bp.route("/get", methods=["GET"])
 @require_auth
 def get_employee():
     data = request.json
-    username = data.get("username")
+    id = data.get("id")
 
-    if not username:
-        current_app.logger.error(f"No username '{username}' provided for employee.")
+    if not id:
+        current_app.logger.error(f"Wrong employee ID '{id}' provided.")
         return jsonify({
-            "code": "NO_USERNAME_PROVIDED",
-            "message": f"Please enter username '{username}'."
+            "code": "WRONG_EMPLOYEE_ID_PROVIDED",
+            "message": f"Please enter correct employee ID '{id}'."
         }), 403
     
-    employee = get_employee_crud(username=username)
+    employee = get_employee_crud(id=id)
 
     try:
         if employee:
@@ -28,10 +28,10 @@ def get_employee():
             return EmployeeResponse(employee).to_dict()
         
         else:
-            current_app.logger.error(f"Username '{username}' not registered.")
+            current_app.logger.error(f"Employee ID '{id}' is not registered.")
             return jsonify({
-                "code":"USERNAME_DOESNT_EXIST",
-                "message": f"Username '{username}' is not registered, please try another."
+                "code":"EMPLOYEE_ID_DOESNT_EXIST",
+                "message": f"Employee ID '{id}' is not registered, please try another."
             }), 403
     
     except IntegrityError as error:
@@ -50,7 +50,7 @@ def get_employee():
     
 
 #Get all employees
-@get_bp.route("/all", methods=["GET"])
+@employee_get_bp.route("/all", methods=["GET"])
 @require_auth
 def get_all_employees():
      
@@ -82,12 +82,12 @@ def get_all_employees():
         })
 
 #Get short details (employee)
-@get_bp.route("/short", methods = ["GET"])
+@employee_get_bp.route("/short", methods = ["GET"])
 @require_auth
-def get_employee_short():
+def get_employees_short():
 
     try:
-        employees = get_employee_short_crud()
+        employees = get_employees_short_crud()
 
         if employees:
             current_app.logger.info(f"Employees {employees} response returned.")
