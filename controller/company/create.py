@@ -10,8 +10,8 @@ company_create_bp = Blueprint("company_create_bp", __name__, url_prefix="/compan
 #Create company
 @company_create_bp.route("/create", methods=["POST"])
 @require_auth
-def create_employee():
-    data = CreateEmployeeRequest(request.json)
+def create_company():
+    data = CreateCompanyRequest(request.json)
     valid, message = data.is_valid()
 
     if not valid:
@@ -21,35 +21,27 @@ def create_employee():
             "message": f"Schema error occured {message}."
         }), 400
     
-    employee = verify_employee(data.employee_name, data.employee_email, data.employee_cnic)
+    company = verify_company(data.company_name, data.company_email)
 
-    if employee:
-        current_app.logger.info(f"Employee already exists. '{employee}'")
+    if company:
+        current_app.logger.info(f"Company already exists. '{company}'")
         return jsonify({
-            "code": "EMPLOYEE_ALREADY_EXISTS",
-            "message": f"This employee '{employee}' already exists, try a new one."
+            "code": "COMPANY_ALREADY_EXISTS",
+            "message": f"This company '{company}' already exists, try a new one."
         }), 403
     
     try:
-        new_employee = create_employee_crud(
-            employee_company_id = data.employee_company_id,
-            employee_name = data.employee_name,
-            employee_status = data.employee_status,
-            employee_department = data.employee_department,
-            employee_email = data.employee_email,
-            employee_phone_number_main = data.employee_phone_number_main,
-            employee_phone_number_secondary = data.employee_phone_number_secondary,
-            employee_dob = data.employee_dob,
-            employee_cnic = data.employee_cnic,
-            employee_gender = data.employee_gender,
-            employee_address_permanent = data.employee_address_permanent,
-            employee_address_current = data.employee_address_current
+        new_company = create_company_crud(
+            company_name = data.company_name,
+            company_email = data.company_email,
+            company_joined = data.company_joined,
+            company_address = data.company_address
         )
 
-        current_app.logger.info(f"employee {new_employee} created.")
+        current_app.logger.info(f"Company {new_company} created.")
         return jsonify({
-            "code": "EMPLOYEE_CREATED",
-            "data": EmployeeResponse(new_employee).to_dict()
+            "code": "COMPANY_CREATED",
+            "data": CompanyResponse(new_company).to_dict()
         }), 201
 
     except IntegrityError as error:

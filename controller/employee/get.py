@@ -81,7 +81,7 @@ def get_all_employees():
             "message":f"Exceptional error {e} occured. Please try again."
         })
 
-#Get short details (employee)
+#Get short details (employees)
 @employee_get_bp.route("/short", methods = ["GET"])
 @require_auth
 def get_employees_short():

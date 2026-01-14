@@ -14,8 +14,6 @@ def delete_employee():
     data = DeleteEmployeeRequest(request.json)
     valid, message = data.is_valid()
 
-    print(data)
-
     if not valid:
         current_app.logger.error(f"Schema error {message}.")
         return jsonify({
