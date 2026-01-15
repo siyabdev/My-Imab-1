@@ -1,17 +1,11 @@
 import enum
 from models import EmployeeBatchNameEnum
 
-#Employee batch name(enum)
-class EmployeeBatchNameEnum(enum.Enum):
-    contract = "contract"
-    intern = "intern"
-    regular = "regular"
-
 #Create payroll(class) request
 class CreatePayrollRequest:
     def __init__(self, data):
         self.employee_id = data.get("employee_id") 
-        self.employee_company_id = data.get("employee_company_id")
+        self.company_id = data.get("company_id")
         self.batch_name = data.get("batch_name")
         self.batch_status = data.get("batch_status")
         self.employee_basic_salary = data.get("employee_basic_salary")
@@ -34,7 +28,7 @@ class CreatePayrollRequest:
 
     def is_valid(self):
         #Required fields
-        if not all([self.employee_id, self.employee_company_id, self.batch_name, self.batch_status, self.employee_basic_salary, self.employee_hourly_rate, self.employee_contract_hours, self.employee_rota_hours, self.employee_worked_hours, self.employee_net_hours, self.employee_over_below, self.employee_lates, self.employee_early, self.employee_leaves, self.employee_score, self.total_addition, self.total_deduction, self.total_gross, self.total_tax, self.employee_total_net, self.total_net_orion]):
+        if not all([self.employee_id, self.company_id, self.batch_name, self.batch_status, self.employee_basic_salary, self.employee_hourly_rate, self.employee_contract_hours, self.employee_rota_hours, self.employee_worked_hours, self.employee_net_hours, self.employee_over_below, self.employee_lates, self.employee_early, self.employee_leaves, self.employee_score, self.total_addition, self.total_deduction, self.total_gross, self.total_tax, self.employee_total_net, self.total_net_orion]):
             return False, "Missing required fields."
         
         #Validate fields values
@@ -72,7 +66,7 @@ class CreatePayrollRequest:
             return False, "Total net orion should be greater than or equal to 0."
 
         #Validate employee batch name against enum
-        if self.batch_name not in [batch_name.value for batch_name in EmployeeBatchNameEnum]:
+        if self.batch_name and self.batch_name not in [batch_name.value for batch_name in EmployeeBatchNameEnum]:
             return False, "Invalid employee batch name provided."
         
         return True, None
@@ -144,7 +138,7 @@ class UpdatePayrollRequest:
             return False, "Total net orion should be greater than or equal to 0."
 
         #Validate employee batch name against enum
-        if self.batch_name not in [batch_name.value for batch_name in EmployeeBatchNameEnum]:
+        if self.batch_name and self.batch_name not in [batch_name.value for batch_name in EmployeeBatchNameEnum]:
             return False, "Invalid employee batch name provided."
                 
         return True, None
@@ -168,7 +162,7 @@ class PayrollResponse:
     def __init__(self, data):
         self.id = data.id
         self.employee_id = data.employee_id 
-        self.employee_company_id = data.employee_company_id
+        self.company_id = data.company_id
         self.batch_name = data.batch_name
         self.batch_status = data.batch_status
         self.employee_basic_salary = data.employee_basic_salary
@@ -192,8 +186,8 @@ class PayrollResponse:
         #Check if employee relationship is loaded
         if getattr(data, 'employee') and data.employee:
             self.employee_name = data.employee.employee_name
-            self.employee_status = data.employee.employee_status.value if data.employee.employee_status else None
-            self.employee_department = data.employee.employee_department.value if data.employee.employee_department else None
+            self.employee_status = data.employee.employee_status if data.employee.employee_status else None
+            self.employee_department = data.employee.employee_department if data.employee.employee_department else None
         else:
             self.employee_name = None
             self.employee_status = None
@@ -218,7 +212,7 @@ class PayrollResponse:
         return {
             "id": self.id,
             "employee_id": self.employee_id,
-            "company_id": self.employee_company_id,
+            "company_id": self.company_id,
             "batch_name": self.batch_name.value,
             "batch_status": self.batch_status,
             "employee_name": self.employee_name,

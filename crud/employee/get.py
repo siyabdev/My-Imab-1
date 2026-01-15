@@ -36,7 +36,7 @@ def get_employees_crud():
 #Get short details (employee)
 def get_employees_short_crud():
     try:
-        employees = Employee.query.with_entities(Employee.id, Employee.employee_name, Employee.employee_status.value, Employee.employee_department.value).all()
+        employees = Employee.query.with_entities(Employee.id, Employee.employee_name, Employee.employee_status, Employee.employee_department).all()
         db.session.commit()
         return employees
     

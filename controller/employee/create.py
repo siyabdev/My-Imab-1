@@ -13,10 +13,7 @@ employee_create_bp = Blueprint("employee_create_bp", __name__, url_prefix="/empl
 def create_employee():
     data = CreateEmployeeRequest(request.json)
     valid, message = data.is_valid()
-
-
-    current_app.logger.info(f"Payload. '{request.json}'")
-
+    
     if not valid:
         current_app.logger.error(f"Schema error. {message}."),400
         return jsonify({

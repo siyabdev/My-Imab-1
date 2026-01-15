@@ -5,12 +5,12 @@ from sqlalchemy.exc import IntegrityError
 from utils.utils import check_enum_format
 
 #Create payroll
-def create_payroll_crud(employee_id, employee_company_id, batch_name, batch_status, employee_basic_salary, employee_hourly_rate, employee_contract_hours, employee_rota_hours, employee_worked_hours, employee_net_hours, employee_over_below, employee_lates, employee_early, employee_leaves, employee_score, total_addition, total_deduction, total_gross, total_tax, employee_total_net, total_net_orion):
+def create_payroll_crud(employee_id, company_id, batch_name, batch_status, employee_basic_salary, employee_hourly_rate, employee_contract_hours, employee_rota_hours, employee_worked_hours, employee_net_hours, employee_over_below, employee_lates, employee_early, employee_leaves, employee_score, total_addition, total_deduction, total_gross, total_tax, employee_total_net, total_net_orion):
 
     try:
         create_query = Payroll(
             employee_id = employee_id,
-            employee_company_id = employee_company_id,
+            company_id = company_id,
             batch_name = check_enum_format(batch_name),
             batch_status = batch_status,
             employee_basic_salary = employee_basic_salary,

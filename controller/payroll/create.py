@@ -33,7 +33,7 @@ def create_payroll():
     try:
         new_payroll = create_payroll_crud(
             employee_id = data.employee_id,
-            employee_company_id = data.employee_company_id,
+            company_id = data.company_id,
             batch_name = data.batch_name,
             batch_status = data.batch_status,
             employee_basic_salary = data.employee_basic_salary,

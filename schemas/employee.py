@@ -1,4 +1,3 @@
-import enum
 from models import EmployeeDepartmentEnum, EmployeeGenderEnum, EmployeeStatusEnum
 
 #Create employee(class) request
@@ -23,15 +22,15 @@ class CreateEmployeeRequest:
             return False, "Missing required fields."
 
         #Validate employee department against enum
-        if self.employee_department not in [employee_department.value for employee_department in EmployeeDepartmentEnum]:
+        if self.employee_department and self.employee_department not in [employee_department.value for employee_department in EmployeeDepartmentEnum]:
             return False, "Invalid employee department provided."
         
         #Validate employee gender against enum
-        if self.employee_gender not in [employee_gender.value for employee_gender in EmployeeGenderEnum]:
+        if self.employee_gender and self.employee_gender  not in [employee_gender.value for employee_gender in EmployeeGenderEnum]:
             return False, "Invalid employee gender provided."
         
         #Validate employee status against enum
-        if self.employee_status not in [employee_status.value for employee_status in EmployeeStatusEnum]:
+        if self.employee_status and self.employee_status not in [employee_status.value for employee_status in EmployeeStatusEnum]:
             return False, "Invalid employee status provided."
 
         return True, None
@@ -58,15 +57,15 @@ class UpdateEmployeeRequest:
             return False, "Employee id missing. Please provide employee id."
 
         #Validate employee department against enum
-        if self.employee_department not in [employee_department.value for employee_department in EmployeeDepartmentEnum]:
+        if self.employee_department and self.employee_department not in [employee_department.value for employee_department in EmployeeDepartmentEnum]:
             return False, "Invalid employee department provided."
         
         #Validate employee gender against enum
-        if self.employee_gender not in [employee_gender.value for employee_gender in EmployeeGenderEnum]:
+        if self.employee_gender and self.employee_gender not in [employee_gender.value for employee_gender in EmployeeGenderEnum]:
             return False, "Invalid employee gender provided."
         
         #Validate employee status against enum
-        if self.employee_status not in [employee_status.value for employee_status in EmployeeStatusEnum]:
+        if self.employee_status and self.employee_status not in [employee_status.value for employee_status in EmployeeStatusEnum]:
             return False, "Invalid employee status provided."
         
         return True, None
