@@ -1,5 +1,3 @@
-from flask import current_app
-
 #Login(class) request
 class LoginRequest:
     def __init__(self, data):
@@ -9,11 +7,9 @@ class LoginRequest:
     def is_valid(self):
         #Required fields
         if not self.username:
-            current_app.logger.error("Username required for login.")
             return False, "Username required for login."
         
         if not self.password:
-            current_app.logger.error("Password required for login.")
             return False, "Password required for login."
         
         #Validate fields

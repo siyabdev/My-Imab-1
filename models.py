@@ -7,20 +7,26 @@ from datetime import date
 
 #Employee department(enum)
 class EmployeeDepartmentEnum(enum.Enum):
-    MANAGEMENT = "management"
-    MAINTENANCE = "maintenance"
-    COVERING = "covering"
+    management = "management"
+    maintenance = "maintenance"
+    covering = "covering"
 
 #Employee gender(enum)
 class EmployeeGenderEnum(enum.Enum):
-    MALE = "male"
-    FEMALE = "female"
+    male = "male"
+    female = "female"
 
 #Employee batch name(enum)
 class EmployeeBatchNameEnum(enum.Enum):
-    PERMANENT = "Permanent"
-    PROBATION = "Probation"
-    TRAINEE = "Trainee"
+    contract = "contract"
+    intern = "intern"
+    regular = "regular"
+
+#Employee status(enum)
+class EmployeeStatusEnum(enum.Enum):
+    permanent = "permanent"
+    probation = "probation"
+    trainee = "trainee"
 
 #Login class
 class Login(BaseModel):
@@ -71,9 +77,9 @@ class Company(BaseModel):
 #Employee class
 class Employee(BaseModel):
     id = db.Column(db.Integer, primary_key = True)
-    employee_company_id = db.Column(db.Integer, db.ForeignKey('employee_company.id'), nullable=False)
+    employee_company_id = db.Column(db.Integer, db.ForeignKey('company.id'), nullable=False)
     employee_name = db.Column(db.String(120), nullable=False)
-    employee_status = db.Column(db.String(120), nullable=False)
+    employee_status = db.Column(db.Enum(EmployeeStatusEnum, name="employee_status_enum"), nullable=False)
     employee_department = db.Column(db.Enum(EmployeeDepartmentEnum, name="employee_department_enum"), nullable=False)
     employee_email = db.Column(db.String(120), nullable=False)
     employee_phone_number_main = db.Column(db.String(120), nullable=False)
@@ -95,7 +101,7 @@ class Employee(BaseModel):
             "id": self.id,
             "employee_company_id": self.employee_company_id,
             "employee_name": self.employee_name,
-            "employee_status": self.employee_status,
+            "employee_status": self.employee_status.value,
             "employee_department": self.employee_department.value,
             "employee_email": self.employee_email,
             "employee_phone_number_main": self.employee_phone_number_main,

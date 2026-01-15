@@ -1,5 +1,3 @@
-from flask import current_app
-
 #Create company(class) request 
 class CreateCompanyRequest:
     def __init__(self, data):
@@ -11,7 +9,6 @@ class CreateCompanyRequest:
     def is_valid(self):
         #Required fields
         if not all([self.company_name, self.company_email, self.company_joined, self.company_address]):
-            current_app.logger.error("Missing required fields.")
             return False, "Missing required fields."
         
         return True, None
@@ -28,7 +25,6 @@ class UpdateCompanyRequest:
     def is_valid(self):
 
         if not self.id:
-            current_app.logger.error("Company id missing. Please provide company id.")
             return False, "Company id missing. Please provide company id."
         
         return True, None
@@ -43,7 +39,6 @@ class DeleteCompanyRequest:
 
     def is_valid(self):
         if not (self.id):
-            current_app.logger.error("Company ID doesnt exist.")
             return False, "Company ID doesnt exist."
         
         return True, None
@@ -60,7 +55,6 @@ class CompanyResponse:
     def is_valid(self):
 
         if not self.id:
-            current_app.logger.error("Company id missing. Please provide company id.")
             return False, "Company id missing. Please provide company id."
         
     def to_dict(self):
@@ -91,4 +85,4 @@ class CompanyShortResponse:
 class CompanyListResponse:
     @staticmethod
     def from_list(companies):
-        return [CompanyListResponse(comp).to_dict() for comp in companies]
+        return [CompanyResponse(comp).to_dict() for comp in companies]

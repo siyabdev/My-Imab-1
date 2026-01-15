@@ -46,3 +46,7 @@ def get_payroll(employee_id, batch_name):
     except Exception as e:
         current_app.logger.error(f"Exceptional error {e}.")
         raise e
+
+#Checking Enum Format 
+def check_enum_format(value):
+    return value.lower()

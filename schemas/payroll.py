@@ -1,11 +1,11 @@
-from flask import current_app
 import enum
+from models import EmployeeBatchNameEnum
 
 #Employee batch name(enum)
 class EmployeeBatchNameEnum(enum.Enum):
-    PERMANENT = "Permanent"
-    PROBATION = "Probation"
-    TRAINEE = "Trainee"
+    contract = "contract"
+    intern = "intern"
+    regular = "regular"
 
 #Create payroll(class) request
 class CreatePayrollRequest:
@@ -35,62 +35,44 @@ class CreatePayrollRequest:
     def is_valid(self):
         #Required fields
         if not all([self.employee_id, self.employee_company_id, self.batch_name, self.batch_status, self.employee_basic_salary, self.employee_hourly_rate, self.employee_contract_hours, self.employee_rota_hours, self.employee_worked_hours, self.employee_net_hours, self.employee_over_below, self.employee_lates, self.employee_early, self.employee_leaves, self.employee_score, self.total_addition, self.total_deduction, self.total_gross, self.total_tax, self.employee_total_net, self.total_net_orion]):
-            current_app.logger.error("Missing required fields.")
             return False, "Missing required fields."
         
         #Validate fields values
-        if len(self.employee_basic_salary) < 0:
-            current_app.logger.error("Employee basic salary should be greater than or equal to 0.")
+        if self.employee_basic_salary < 0:
             return False, "Employee basic salary should be greater than or equal to 0."
-        if len(self.employee_hourly_rate) < 0:
-            current_app.logger.error("Employee hourly rate should be greater than or equal to 0.")
+        if self.employee_hourly_rate < 0:
             return False, "Employee hourly rate should be greater than or equal to 0."
-        if len(self.employee_contract_hours) < 0:
-            current_app.logger.error("Employee contract hours should be greater than or equal to 0.")
+        if self.employee_contract_hours < 0:
             return False, "Employee contract hours should be greater than or equal to 0."        
-        if len(self.employee_rota_hours) < 0:
-            current_app.logger.error("Employee rota hours should be greater than or equal to 0.")
+        if self.employee_rota_hours < 0:
             return False, "Employee rota hours should be greater than or equal to 0."
-        if len(self.employee_worked_hours) < 0:
-            current_app.logger.error("Employee worked hours should be greater than or equal to 0.")
+        if self.employee_worked_hours < 0:
             return False, "Employee worked hours should be greater than or equal to 0."
-        if len(self.employee_net_hours) < 0:
-            current_app.logger.error("Employee net hours should be greater than or equal to 0.")
+        if self.employee_net_hours < 0:
             return False, "Employee net hours should be greater than or equal to 0."
-        if len(self.employee_lates) < 0:
-            current_app.logger.error("Employee lates should be greater than or equal to 0.")
+        if self.employee_lates < 0:
             return False, "Employee lates should be greater than or equal to 0."
-        if len(self.employee_early) < 0:
-            current_app.logger.error("Employee early should be greater than or equal to 0.")
+        if self.employee_early < 0:
             return False, "Employee early should be greater than or equal to 0."
-        if len(self.employee_leaves) < 0:
-            current_app.logger.error("Employee leaves should be greater than or equal to 0.")
+        if self.employee_leaves < 0:
             return False, "Employee leaves should be greater than or equal to 0."
-        if len(self.employee_score) < 0:
-            current_app.logger.error("Employee score should be greater than or equal to 0.")
+        if self.employee_score < 0:
             return False, "Employee score should be greater than or equal to 0."
-        if len(self.total_addition) < 0:
-            current_app.logger.error("Total addition should be greater than or equal to 0.")
+        if self.total_addition < 0:
             return False, "Total addition should be greater than or equal to 0."
-        if len(self.total_deduction) < 0:
-            current_app.logger.error("Total deduction should be greater than or equal to 0.")
+        if self.total_deduction < 0:
             return False, "Total deduction should be greater than or equal to 0."
-        if len(self.total_gross) < 0:
-            current_app.logger.error("Total gross should be greater than or equal to 0.")
+        if self.total_gross < 0:
             return False, "Total gross should be greater than or equal to 0."
-        if len(self.total_tax) < 0:
-            current_app.logger.error("Total tax should be greater than or equal to 0.")
+        if self.total_tax < 0:
             return False, "Total tax should be greater than or equal to 0."
-        if len(self.employee_total_net) < 0:
-            current_app.logger.error("Employee total net should be greater than or equal to 0.")
+        if self.employee_total_net < 0:
             return False, "Employee total net should be greater than or equal to 0."
-        if len(self.total_net_orion) < 0:
-            current_app.logger.error("Total net orion should be greater than or equal to 0.")
+        if self.total_net_orion < 0:
             return False, "Total net orion should be greater than or equal to 0."
 
         #Validate employee batch name against enum
         if self.batch_name not in [batch_name.value for batch_name in EmployeeBatchNameEnum]:
-            current_app.logger.error("Invalid employee batch name provided.")
             return False, "Invalid employee batch name provided."
         
         return True, None
@@ -122,66 +104,47 @@ class UpdatePayrollRequest:
     def is_valid(self):
 
         if not self.employee_id:
-            current_app.logger.error("Employee id missing. Please provide employee id.")
             return False, "Employee id missing. Please provide employee id."
                
         if not self.batch_name:
-            current_app.logger.error("Batch name missing. Please provide batch name.")
             return False, "Batch name missing. Please provide batch name."
              
         #Validate fields values
-        if len(self.employee_basic_salary) < 0:
-            current_app.logger.error("Employee basic salary should be greater than or equal to 0.")
+        if self.employee_basic_salary < 0:
             return False, "Employee basic salary should be greater than or equal to 0."
-        if len(self.employee_hourly_rate) < 0:
-            current_app.logger.error("Employee hourly rate should be greater than or equal to 0.")
+        if self.employee_hourly_rate < 0:
             return False, "Employee hourly rate should be greater than or equal to 0."
-        if len(self.employee_contract_hours) < 0:
-            current_app.logger.error("Employee contract hours should be greater than or equal to 0.")
+        if self.employee_contract_hours < 0:
             return False, "Employee contract hours should be greater than or equal to 0."        
-        if len(self.employee_rota_hours) < 0:
-            current_app.logger.error("Employee rota hours should be greater than or equal to 0.")
+        if self.employee_rota_hours < 0:
             return False, "Employee rota hours should be greater than or equal to 0."
-        if len(self.employee_worked_hours) < 0:
-            current_app.logger.error("Employee worked hours should be greater than or equal to 0.")
+        if self.employee_worked_hours < 0:
             return False, "Employee worked hours should be greater than or equal to 0."
-        if len(self.employee_net_hours) < 0:
-            current_app.logger.error("Employee net hours should be greater than or equal to 0.")
+        if self.employee_net_hours < 0:
             return False, "Employee net hours should be greater than or equal to 0."
-        if len(self.employee_lates) < 0:
-            current_app.logger.error("Employee lates should be greater than or equal to 0.")
+        if self.employee_lates < 0:
             return False, "Employee lates should be greater than or equal to 0."
-        if len(self.employee_early) < 0:
-            current_app.logger.error("Employee early should be greater than or equal to 0.")
+        if self.employee_early < 0:
             return False, "Employee early should be greater than or equal to 0."
-        if len(self.employee_leaves) < 0:
-            current_app.logger.error("Employee leaves should be greater than or equal to 0.")
+        if self.employee_leaves < 0:
             return False, "Employee leaves should be greater than or equal to 0."
-        if len(self.employee_score) < 0:
-            current_app.logger.error("Employee score should be greater than or equal to 0.")
+        if self.employee_score < 0:
             return False, "Employee score should be greater than or equal to 0."
-        if len(self.total_addition) < 0:
-            current_app.logger.error("Total addition should be greater than or equal to 0.")
+        if self.total_addition < 0:
             return False, "Total addition should be greater than or equal to 0."
-        if len(self.total_deduction) < 0:
-            current_app.logger.error("Total deduction should be greater than or equal to 0.")
+        if self.total_deduction < 0:
             return False, "Total deduction should be greater than or equal to 0."
-        if len(self.total_gross) < 0:
-            current_app.logger.error("Total gross should be greater than or equal to 0.")
+        if self.total_gross < 0:
             return False, "Total gross should be greater than or equal to 0."
-        if len(self.total_tax) < 0:
-            current_app.logger.error("Total tax should be greater than or equal to 0.")
+        if self.total_tax < 0:
             return False, "Total tax should be greater than or equal to 0."
-        if len(self.employee_total_net) < 0:
-            current_app.logger.error("Employee total net should be greater than or equal to 0.")
+        if self.employee_total_net < 0:
             return False, "Employee total net should be greater than or equal to 0."
-        if len(self.total_net_orion) < 0:
-            current_app.logger.error("Total net orion should be greater than or equal to 0.")
+        if self.total_net_orion < 0:
             return False, "Total net orion should be greater than or equal to 0."
 
         #Validate employee batch name against enum
         if self.batch_name not in [batch_name.value for batch_name in EmployeeBatchNameEnum]:
-            current_app.logger.error("Invalid employee batch name provided.")
             return False, "Invalid employee batch name provided."
                 
         return True, None
@@ -196,7 +159,6 @@ class DeletePayrollRequest:
     
     def is_valid(self):
         if not (self.id):
-            current_app.logger.error("Payroll ID doesnt exist.")
             return False, "Payroll ID doesnt exist."
         
         return True, None
@@ -230,7 +192,7 @@ class PayrollResponse:
         #Check if employee relationship is loaded
         if getattr(data, 'employee') and data.employee:
             self.employee_name = data.employee.employee_name
-            self.employee_status = data.employee.employee_status
+            self.employee_status = data.employee.employee_status.value if data.employee.employee_status else None
             self.employee_department = data.employee.employee_department.value if data.employee.employee_department else None
         else:
             self.employee_name = None
@@ -246,11 +208,9 @@ class PayrollResponse:
     def is_valid(self):
 
         if not self.employee_id:
-            current_app.logger.error("Employee id missing. Please provide employee id.")
             return False, "Employee id missing. Please provide employee id."
 
         if not self.batch_name:
-            current_app.logger.error("Employee batch name missing. Please provide employee batch name.")
             return False, "Employee batch name missing. Please provide employee batch name."
 
 
@@ -262,7 +222,7 @@ class PayrollResponse:
             "batch_name": self.batch_name.value,
             "batch_status": self.batch_status,
             "employee_name": self.employee_name,
-            "employee_status": self.employee_status,
+            "employee_status": self.employee_status.value,
             "employee_department": self.employee_department.value,
             "company_name": self.company_name,
             "employee_basic_salary": self.employee_basic_salary,

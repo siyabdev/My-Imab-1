@@ -55,12 +55,12 @@ def get_company():
 def get_all_companies():
      
     try:
-         get_companies = get_companies_crud()
+        companies = get_companies_crud()
 
-         if get_companies:
-              current_app.logger.info(f"Companies {get_companies} response returned.")
-              return CompanyListResponse.from_list(get_companies)
-         else:
+        if companies:
+            current_app.logger.info(f"Companies {companies} response returned.")
+            return CompanyListResponse.from_list(companies)
+        else:
             current_app.logger.error("No companies found.")
             return jsonify({
                 "code":"NO_COMPANIES_FOUND",
