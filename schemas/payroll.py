@@ -83,7 +83,6 @@ class UpdatePayrollRequest:
         self.employee_rota_hours = data.get("employee_rota_hours")
         self.employee_worked_hours = data.get("employee_worked_hours")
         self.employee_net_hours = data.get("employee_net_hours")
-        self.employee_over_below = data.get("employee_over_below")
         self.employee_lates = data.get("employee_lates")
         self.employee_early = data.get("employee_early")
         self.employee_leaves = data.get("employee_leaves")
@@ -104,37 +103,37 @@ class UpdatePayrollRequest:
             return False, "Batch name missing. Please provide batch name."
              
         #Validate fields values
-        if self.employee_basic_salary < 0:
+        if self.employee_basic_salary and self.employee_basic_salary < 0:
             return False, "Employee basic salary should be greater than or equal to 0."
-        if self.employee_hourly_rate < 0:
+        if self.employee_hourly_rate and self.employee_hourly_rate < 0:
             return False, "Employee hourly rate should be greater than or equal to 0."
-        if self.employee_contract_hours < 0:
+        if self.employee_contract_hours and self.employee_contract_hours < 0:
             return False, "Employee contract hours should be greater than or equal to 0."        
-        if self.employee_rota_hours < 0:
+        if self.employee_rota_hours  and self.employee_rota_hours < 0:
             return False, "Employee rota hours should be greater than or equal to 0."
-        if self.employee_worked_hours < 0:
+        if self.employee_worked_hours and self.employee_worked_hours < 0:
             return False, "Employee worked hours should be greater than or equal to 0."
-        if self.employee_net_hours < 0:
+        if self.employee_net_hours and self.employee_net_hours < 0:
             return False, "Employee net hours should be greater than or equal to 0."
-        if self.employee_lates < 0:
+        if self.employee_lates and self.employee_lates < 0:
             return False, "Employee lates should be greater than or equal to 0."
-        if self.employee_early < 0:
+        if self.employee_early and self.employee_early < 0:
             return False, "Employee early should be greater than or equal to 0."
-        if self.employee_leaves < 0:
+        if self.employee_leaves and self.employee_leaves < 0:
             return False, "Employee leaves should be greater than or equal to 0."
-        if self.employee_score < 0:
+        if self.employee_score and self.employee_score  < 0:
             return False, "Employee score should be greater than or equal to 0."
-        if self.total_addition < 0:
+        if self.total_addition and self.total_addition < 0:
             return False, "Total addition should be greater than or equal to 0."
-        if self.total_deduction < 0:
+        if self.total_deduction and self.total_deduction < 0:
             return False, "Total deduction should be greater than or equal to 0."
-        if self.total_gross < 0:
+        if self.total_gross and self.total_gross < 0:
             return False, "Total gross should be greater than or equal to 0."
-        if self.total_tax < 0:
+        if self.total_tax and self.total_tax < 0:
             return False, "Total tax should be greater than or equal to 0."
-        if self.employee_total_net < 0:
+        if self.employee_total_net and self.employee_total_net < 0:
             return False, "Employee total net should be greater than or equal to 0."
-        if self.total_net_orion < 0:
+        if self.total_net_orion and self.total_net_orion < 0:
             return False, "Total net orion should be greater than or equal to 0."
 
         #Validate employee batch name against enum
@@ -144,7 +143,7 @@ class UpdatePayrollRequest:
         return True, None
     
     def has_any_updates(self):
-        return any([self.batch_status, self.employee_basic_salary, self.employee_hourly_rate, self.employee_contract_hours, self.employee_rota_hours, self.employee_worked_hours, self.employee_net_hours, self.employee_over_below, self.employee_lates, self.employee_early, self.employee_leaves, self.employee_score, self.total_addition, self.total_deduction, self.total_gross, self.total_tax, self.employee_total_net, self.total_net_orion])
+        return any([self.batch_status, self.employee_basic_salary, self.employee_hourly_rate, self.employee_contract_hours, self.employee_rota_hours, self.employee_worked_hours, self.employee_net_hours, self.employee_lates, self.employee_early, self.employee_leaves, self.employee_score, self.total_addition, self.total_deduction, self.total_gross, self.total_tax, self.employee_total_net, self.total_net_orion])
 
 #Delete payroll(class) request
 class DeletePayrollRequest:

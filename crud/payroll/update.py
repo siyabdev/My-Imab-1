@@ -4,7 +4,7 @@ from utils.utils import get_payroll
 from sqlalchemy.exc import IntegrityError
 
 #Update payroll
-def update_payroll_crud(employee_id, batch_name, batch_status, employee_basic_salary, employee_hourly_rate, employee_contract_hours, employee_rota_hours, employee_worked_hours, employee_net_hours, employee_over_below, employee_lates, employee_early, employee_leaves, employee_score, total_addition, total_deduction, total_gross, total_tax, employee_total_net, total_net_orion):
+def update_payroll_crud(employee_id, batch_name, batch_status, employee_basic_salary, employee_hourly_rate, employee_contract_hours, employee_rota_hours, employee_worked_hours, employee_net_hours, employee_lates, employee_early, employee_leaves, employee_score, total_addition, total_deduction, total_gross, total_tax, employee_total_net, total_net_orion):
     payroll = get_payroll(employee_id, batch_name)
 
     if not payroll:
@@ -31,9 +31,6 @@ def update_payroll_crud(employee_id, batch_name, batch_status, employee_basic_sa
 
         if employee_net_hours:
             payroll.employee_net_hours = employee_net_hours
-
-        if employee_over_below:
-            payroll.employee_over_below = employee_over_below
         
         if employee_lates:
             payroll.employee_lates = employee_lates
