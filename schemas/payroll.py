@@ -1,4 +1,3 @@
-import enum
 from models import EmployeeBatchNameEnum
 
 #Create payroll(class) request
