@@ -16,12 +16,6 @@ class EmployeeGenderEnum(enum.Enum):
     male = "male"
     female = "female"
 
-#Employee batch name(enum)
-class EmployeeBatchNameEnum(enum.Enum):
-    contract = "contract"
-    intern = "intern"
-    regular = "regular"
-
 #Employee status(enum)
 class EmployeeStatusEnum(enum.Enum):
     permanent = "permanent"
@@ -89,6 +83,7 @@ class Employee(BaseModel):
     employee_gender = db.Column(db.Enum(EmployeeGenderEnum, name="employee_gender_enum"), nullable=False)
     employee_address_permanent = db.Column(db.String(120), nullable=False)
     employee_address_current = db.Column(db.String(120), nullable=False)
+    employee_basic_salary = db.Column(db.Integer, nullable=False)
 
     __table_args__ = (
     UniqueConstraint("employee_email", name="unique_employee_email"),
@@ -110,8 +105,9 @@ class Employee(BaseModel):
             "employee_cnic": self.employee_cnic,
             "employee_gender": self.employee_gender.value,
             "employee_address_permanent": self.employee_address_permanent,
-            "employee_address_current": self.employee_address_current
-    }
+            "employee_address_current": self.employee_address_current,
+            "employee_basic_salary": self.employee_basic_salary
+        }
 
     @classmethod
     def to_dict_list(cls, employees):
@@ -122,7 +118,7 @@ class Payroll(BaseModel):
     id = db.Column(db.Integer, primary_key = True)
     employee_id = db.Column(db.Integer, db.ForeignKey('employee.id'), nullable=False)
     company_id = db.Column(db.Integer, db.ForeignKey('company.id'), nullable=False)
-    batch_name = db.Column(db.Enum(EmployeeBatchNameEnum, name="employee_batch_name_enum"), nullable=False)
+    batch_name = db.Column(db.String(120), nullable=False)
     batch_status = db.Column(db.String(120), nullable=False)
     employee_basic_salary = db.Column(db.Integer, nullable=False)
     employee_hourly_rate = db.Column(db.Integer, nullable=False)
@@ -147,8 +143,7 @@ class Payroll(BaseModel):
     company = relationship("Company", foreign_keys=[company_id])
 
     __table_args__ = (
-    UniqueConstraint("employee_id", name="unique_employee_id"),
-    UniqueConstraint("batch_name", name="unique_batch_name"),
+    UniqueConstraint("employee_id", "batch_name", name="unique_employee_id_batch_name"),
     CheckConstraint("employee_basic_salary >= 0", name="min_employee_basic_salary_check"),
     CheckConstraint("employee_hourly_rate >= 0", name="min_employee_hourly_rate_check"),
     CheckConstraint("employee_contract_hours >= 0", name="min_employee_contract_hours_check"),
@@ -172,7 +167,7 @@ class Payroll(BaseModel):
             "id": self.id,
             "employee_id": self.employee_id,
             "company_id": self.company_id,
-            "batch_name": self.batch_name.value,
+            "batch_name": self.batch_name,
             "batch_status": self.batch_status,
             "employee_basic_salary": self.employee_basic_salary,
             "employee_hourly_rate": self.employee_hourly_rate,
