@@ -66,14 +66,14 @@ def get_score(late, early, leaves):
 #Get addition
 def get_addition(over_below, hourly_rate):
     if over_below > 0:
-        return over_below * hourly_rate
+        return abs(over_below) * hourly_rate
     else:
         return 0
 
 #Get deduction
 def get_deduction(over_below, hourly_rate):
     if over_below < 0:
-        return over_below * hourly_rate
+        return abs(over_below) * hourly_rate
     else:
         return 0
 
