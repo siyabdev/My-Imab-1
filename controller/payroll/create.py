@@ -34,7 +34,7 @@ def create_payroll():
             "message": f"Schema error occured {message}."
         }), 400
     
-    # Get employee from database
+    #Get employee from database
     employee = get_employee(data.employee_id)
     if not employee:
         current_app.logger.error(f"Employee {data.employee_id} not found.")
@@ -43,7 +43,7 @@ def create_payroll():
             "message": f"Employee {data.employee_id} not found."
         }), 404
         
-    # Get company from database
+    #Get company from database
     company = get_company(data.company_id)
     if not company:
         current_app.logger.error(f"Company {data.company_id} not found.")
@@ -52,7 +52,7 @@ def create_payroll():
             "message": f"Company {data.company_id} not found."
         }), 404
     
-    # Get payroll from database
+    #Get payroll from database
     payroll = get_payroll(data.employee_id, data.batch_name)
     if payroll: 
         current_app.logger.info(f"Payroll {payroll} already exists.")
@@ -61,7 +61,7 @@ def create_payroll():
             "message": f"This payroll {data.employee_id}, '{data.batch_name}' already exists, try a new one."
         }), 403
         
-    # Calculations
+    #Calculations
     employee_hourly_rate = get_hourly_rate(employee.employee_basic_salary, data.employee_contract_hours)
     employee_over_below = get_over_below(data.employee_worked_hours, data.employee_contract_hours)
     employee_score = get_score(data.employee_lates, data.employee_early, data.employee_leaves)
