@@ -1,148 +1,72 @@
-from models import EmployeeBatchNameEnum
-
 #Create payroll(class) request
 class CreatePayrollRequest:
     def __init__(self, data):
         self.employee_id = data.get("employee_id") 
         self.company_id = data.get("company_id")
         self.batch_name = data.get("batch_name")
-        self.batch_status = data.get("batch_status")
-        self.employee_basic_salary = data.get("employee_basic_salary")
-        self.employee_hourly_rate = data.get("employee_hourly_rate")
+        self.batch_status = data.get("batch_status", "open")
         self.employee_contract_hours = data.get("employee_contract_hours")
         self.employee_rota_hours = data.get("employee_rota_hours")
         self.employee_worked_hours = data.get("employee_worked_hours")
-        self.employee_net_hours = data.get("employee_net_hours")
-        self.employee_over_below = data.get("employee_over_below")
-        self.employee_lates = data.get("employee_lates")
-        self.employee_early = data.get("employee_early")
-        self.employee_leaves = data.get("employee_leaves")
-        self.employee_score = data.get("employee_score")
-        self.total_addition = data.get("total_addition")
-        self.total_deduction = data.get("total_deduction")
-        self.total_gross = data.get("total_gross")
-        self.total_tax = data.get("total_tax")
-        self.employee_total_net = data.get("employee_total_net")
-        self.total_net_orion = data.get("total_net_orion")
+        self.employee_lates = data.get("employee_lates", 0)
+        self.employee_early = data.get("employee_early", 0)
+        self.employee_leaves = data.get("employee_leaves", 0)
 
     def is_valid(self):
         #Required fields
-        if not all([self.employee_id, self.company_id, self.batch_name, self.batch_status, self.employee_basic_salary, self.employee_hourly_rate, self.employee_contract_hours, self.employee_rota_hours, self.employee_worked_hours, self.employee_net_hours, self.employee_over_below, self.employee_lates, self.employee_early, self.employee_leaves, self.employee_score, self.total_addition, self.total_deduction, self.total_gross, self.total_tax, self.employee_total_net, self.total_net_orion]):
+        if not all([self.employee_id, self.company_id, self.batch_name, self.employee_contract_hours, self.employee_rota_hours, self.employee_worked_hours]):
             return False, "Missing required fields."
         
         #Validate fields values
-        if self.employee_basic_salary < 0:
-            return False, "Employee basic salary should be greater than or equal to 0."
-        if self.employee_hourly_rate < 0:
-            return False, "Employee hourly rate should be greater than or equal to 0."
         if self.employee_contract_hours < 0:
             return False, "Employee contract hours should be greater than or equal to 0."        
         if self.employee_rota_hours < 0:
             return False, "Employee rota hours should be greater than or equal to 0."
         if self.employee_worked_hours < 0:
             return False, "Employee worked hours should be greater than or equal to 0."
-        if self.employee_net_hours < 0:
-            return False, "Employee net hours should be greater than or equal to 0."
         if self.employee_lates < 0:
             return False, "Employee lates should be greater than or equal to 0."
         if self.employee_early < 0:
             return False, "Employee early should be greater than or equal to 0."
         if self.employee_leaves < 0:
             return False, "Employee leaves should be greater than or equal to 0."
-        if self.employee_score < 0:
-            return False, "Employee score should be greater than or equal to 0."
-        if self.total_addition < 0:
-            return False, "Total addition should be greater than or equal to 0."
-        if self.total_deduction < 0:
-            return False, "Total deduction should be greater than or equal to 0."
-        if self.total_gross < 0:
-            return False, "Total gross should be greater than or equal to 0."
-        if self.total_tax < 0:
-            return False, "Total tax should be greater than or equal to 0."
-        if self.employee_total_net < 0:
-            return False, "Employee total net should be greater than or equal to 0."
-        if self.total_net_orion < 0:
-            return False, "Total net orion should be greater than or equal to 0."
 
-        #Validate employee batch name against enum
-        if self.batch_name and self.batch_name not in [batch_name.value for batch_name in EmployeeBatchNameEnum]:
-            return False, "Invalid employee batch name provided."
-        
         return True, None
     
 #Update payroll(class) request
 class UpdatePayrollRequest:
     def __init__(self, data):
-        self.employee_id = data.get("employee_id") 
-        self.batch_name = data.get("batch_name")
-        self.batch_status = data.get("batch_status")
-        self.employee_basic_salary = data.get("employee_basic_salary")
-        self.employee_hourly_rate = data.get("employee_hourly_rate")
+        self.payroll_id = data.get("payroll_id") 
         self.employee_contract_hours = data.get("employee_contract_hours")
         self.employee_rota_hours = data.get("employee_rota_hours")
         self.employee_worked_hours = data.get("employee_worked_hours")
-        self.employee_net_hours = data.get("employee_net_hours")
         self.employee_lates = data.get("employee_lates")
         self.employee_early = data.get("employee_early")
         self.employee_leaves = data.get("employee_leaves")
-        self.employee_score = data.get("employee_score")
-        self.total_addition = data.get("total_addition")
-        self.total_deduction = data.get("total_deduction")
-        self.total_gross = data.get("total_gross")
-        self.total_tax = data.get("total_tax")
-        self.employee_total_net = data.get("employee_total_net")
-        self.total_net_orion = data.get("total_net_orion")
 
     def is_valid(self):
 
-        if not self.employee_id:
-            return False, "Employee id missing. Please provide employee id."
+        if not self.payroll_id:
+            return False, "Payroll id missing. Please provide payroll id."
                
-        if not self.batch_name:
-            return False, "Batch name missing. Please provide batch name."
-             
         #Validate fields values
-        if self.employee_basic_salary and self.employee_basic_salary < 0:
-            return False, "Employee basic salary should be greater than or equal to 0."
-        if self.employee_hourly_rate and self.employee_hourly_rate < 0:
-            return False, "Employee hourly rate should be greater than or equal to 0."
         if self.employee_contract_hours and self.employee_contract_hours < 0:
             return False, "Employee contract hours should be greater than or equal to 0."        
         if self.employee_rota_hours  and self.employee_rota_hours < 0:
             return False, "Employee rota hours should be greater than or equal to 0."
         if self.employee_worked_hours and self.employee_worked_hours < 0:
             return False, "Employee worked hours should be greater than or equal to 0."
-        if self.employee_net_hours and self.employee_net_hours < 0:
-            return False, "Employee net hours should be greater than or equal to 0."
         if self.employee_lates and self.employee_lates < 0:
             return False, "Employee lates should be greater than or equal to 0."
         if self.employee_early and self.employee_early < 0:
             return False, "Employee early should be greater than or equal to 0."
         if self.employee_leaves and self.employee_leaves < 0:
             return False, "Employee leaves should be greater than or equal to 0."
-        if self.employee_score and self.employee_score  < 0:
-            return False, "Employee score should be greater than or equal to 0."
-        if self.total_addition and self.total_addition < 0:
-            return False, "Total addition should be greater than or equal to 0."
-        if self.total_deduction and self.total_deduction < 0:
-            return False, "Total deduction should be greater than or equal to 0."
-        if self.total_gross and self.total_gross < 0:
-            return False, "Total gross should be greater than or equal to 0."
-        if self.total_tax and self.total_tax < 0:
-            return False, "Total tax should be greater than or equal to 0."
-        if self.employee_total_net and self.employee_total_net < 0:
-            return False, "Employee total net should be greater than or equal to 0."
-        if self.total_net_orion and self.total_net_orion < 0:
-            return False, "Total net orion should be greater than or equal to 0."
-
-        #Validate employee batch name against enum
-        if self.batch_name and self.batch_name not in [batch_name.value for batch_name in EmployeeBatchNameEnum]:
-            return False, "Invalid employee batch name provided."
                 
         return True, None
     
     def has_any_updates(self):
-        return any([self.batch_status, self.employee_basic_salary, self.employee_hourly_rate, self.employee_contract_hours, self.employee_rota_hours, self.employee_worked_hours, self.employee_net_hours, self.employee_lates, self.employee_early, self.employee_leaves, self.employee_score, self.total_addition, self.total_deduction, self.total_gross, self.total_tax, self.employee_total_net, self.total_net_orion])
+        return any([self.employee_contract_hours, self.employee_rota_hours, self.employee_worked_hours, self.employee_lates, self.employee_early, self.employee_leaves])
 
 #Delete payroll(class) request
 class DeletePayrollRequest:
@@ -211,7 +135,7 @@ class PayrollResponse:
             "id": self.id,
             "employee_id": self.employee_id,
             "company_id": self.company_id,
-            "batch_name": self.batch_name.value,
+            "batch_name": self.batch_name,
             "batch_status": self.batch_status,
             "employee_name": self.employee_name,
             "employee_status": self.employee_status.value,
