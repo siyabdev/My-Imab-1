@@ -71,7 +71,7 @@ class UpdatePayrollRequest:
 #Delete payroll(class) request
 class DeletePayrollRequest:
     def __init__(self, data):
-        self.id = data.get("id")
+        self.id = data.get("payrol_id")
     
     def is_valid(self):
         if not (self.id):
