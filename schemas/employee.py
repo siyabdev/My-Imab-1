@@ -100,6 +100,7 @@ class EmployeeResponse:
         self.employee_gender = data.employee_gender
         self.employee_address_permanent = data.employee_address_permanent
         self.employee_address_current = data.employee_address_current
+        self.employee_basic_salary = data.employee_basic_salary
     
     def is_valid(self):
 
@@ -120,7 +121,8 @@ class EmployeeResponse:
         "employee_cnic": self.employee_cnic,
         "employee_gender": self.employee_gender.value,
         "employee_address_permanent": self.employee_address_permanent,
-        "employee_address_current": self.employee_address_current
+        "employee_address_current": self.employee_address_current,
+        "employee_basic_salary": self.employee_basic_salary
         }
 
 #Employee(class) short response
