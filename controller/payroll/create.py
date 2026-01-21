@@ -43,6 +43,7 @@ def create_payroll():
             "message": f"Employee {data.employee_id} not found."
         }), 404
         
+        
     #Get company from database
     company = get_company(data.company_id)
     if not company:
@@ -59,6 +60,13 @@ def create_payroll():
         return jsonify({
             "code": "PAYROLL_ALREADY_EXISTS",
             "message": f"This payroll {data.employee_id}, '{data.batch_name}' already exists, try a new one."
+        }), 403
+    
+    if not employee.employee_basic_salary:
+        current_app.logger.error(f"Employee basic salary not found.")
+        return jsonify({
+            "code": "NO_EMPLOYEE_BASIC_SALARY",
+            "message": f"Employee basic salary not found."
         }), 403
         
     #Calculations
