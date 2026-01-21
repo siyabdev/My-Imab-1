@@ -37,7 +37,7 @@ def update_payroll():
             }), 404
 
     try:
-        updated_payroll = update_payroll_crud(employee_contract_hours = data.employee_contract_hours, employee_rota_hours = data.employee_rota_hours, employee_worked_hours = data.employee_worked_hours, employee_lates = data.employee_lates, employee_early = data.employee_early, employee_leaves = data.employee_leaves)
+        updated_payroll = update_payroll_crud(id=data.id, employee_contract_hours = data.employee_contract_hours, employee_rota_hours = data.employee_rota_hours, employee_worked_hours = data.employee_worked_hours, employee_lates = data.employee_lates, employee_early = data.employee_early, employee_leaves = data.employee_leaves)
         current_app.logger.info(f"Payroll updated {updated_payroll}.")
         return jsonify({
             "code": "PAYROLL_UPDATED",

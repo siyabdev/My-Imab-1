@@ -61,7 +61,7 @@ def create_payroll():
             "code": "PAYROLL_ALREADY_EXISTS",
             "message": f"This payroll {data.employee_id}, '{data.batch_name}' already exists, try a new one."
         }), 403
-    
+
     if not employee.employee_basic_salary:
         current_app.logger.error(f"Employee basic salary not found.")
         return jsonify({
