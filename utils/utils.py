@@ -1,7 +1,4 @@
-from flask import current_app
 from models import Company, Employee, Payroll
-from sqlalchemy.orm import joinedload
-from sqlalchemy.exc import IntegrityError
 
 #Get company(class)
 def get_company(id):
@@ -30,22 +27,8 @@ def verify_payroll(id):
 
 #Get payroll(class)
 def get_payroll(employee_id, batch_name):
-    try:
-        #Joinedload for loading Employee and Company data with payroll
-        payroll = (
-            Payroll.query.options(
-            joinedload(Payroll.employee),
-            joinedload(Payroll.company)).filter_by(employee_id=employee_id, batch_name=batch_name).first()
-        )
-        return payroll
-    
-    except IntegrityError as error:
-        current_app.logger.error(f"Integrity error {error}.")
-        raise error
-
-    except Exception as e:
-        current_app.logger.error(f"Exceptional error {e}.")
-        raise e
+    payroll = Payroll.query.filter_by(employee_id=employee_id, batch_name=batch_name).first()
+    return payroll
 
 #Checking Enum Format 
 def check_enum_format(value):

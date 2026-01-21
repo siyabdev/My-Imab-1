@@ -71,30 +71,22 @@ def create_payroll():
     total_tax = get_tax(total_gross)
     employee_total_net = get_total_net(total_gross, total_tax)
     total_net_orion = get_net_orion(total_gross)
+
+    if employee_hourly_rate and employee_over_below and employee_score and total_addition and total_deduction and total_gross and total_tax and employee_total_net and total_net_orion:
+        current_app.logger.info(f"Payroll calculations performed.")
     
     try:
         new_payroll = create_payroll_crud(
             employee_id = data.employee_id,
             company_id = data.company_id,
             batch_name = data.batch_name,
-            batch_status = data.batch_status,
-            employee_basic_salary = employee.employee_basic_salary,
-            employee_hourly_rate = employee_hourly_rate,
+            batch_status = data.batch_status,       
             employee_contract_hours = data.employee_contract_hours,
             employee_rota_hours = data.employee_rota_hours,
             employee_worked_hours = data.employee_worked_hours,
-            employee_net_hours = 0,
-            employee_over_below = employee_over_below,
             employee_lates = data.employee_lates,
             employee_early = data.employee_early,
-            employee_leaves = data.employee_leaves,
-            employee_score = employee_score,
-            total_addition = total_addition,
-            total_deduction = total_deduction,
-            total_gross = total_gross,
-            total_tax = total_tax,
-            employee_total_net = employee_total_net,
-            total_net_orion = total_net_orion
+            employee_leaves = data.employee_leaves
         )
 
         current_app.logger.info(f"Payroll {new_payroll} created.")

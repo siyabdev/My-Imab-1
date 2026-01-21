@@ -43,7 +43,8 @@ def create_employee():
             employee_cnic = data.employee_cnic,
             employee_gender = data.employee_gender,
             employee_address_permanent = data.employee_address_permanent,
-            employee_address_current = data.employee_address_current
+            employee_address_current = data.employee_address_current,
+            employee_basic_salary = data.employee_basic_salary
         )
 
         current_app.logger.info(f"employee {new_employee} created.")

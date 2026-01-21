@@ -15,10 +15,11 @@ class CreateEmployeeRequest:
         self.employee_gender = data.get("employee_gender")
         self.employee_address_permanent = data.get("employee_address_permanent")
         self.employee_address_current = data.get("employee_address_current")
+        self.employee_basic_salary = data.get("employee_basic_salary")
 
     def is_valid(self):
         #Required fields
-        if not all([self.employee_company_id, self.employee_name, self.employee_status, self.employee_department, self.employee_email, self.employee_phone_number_main, self.employee_phone_number_secondary, self.employee_dob, self.employee_cnic, self.employee_gender, self.employee_address_permanent, self.employee_address_current]):
+        if not all([self.employee_company_id, self.employee_name, self.employee_status, self.employee_department, self.employee_email, self.employee_phone_number_main, self.employee_phone_number_secondary, self.employee_dob, self.employee_cnic, self.employee_gender, self.employee_address_permanent, self.employee_address_current, self.employee_basic_salary]):
             return False, "Missing required fields."
 
         #Validate employee department against enum

@@ -11,17 +11,16 @@ payroll_get_bp = Blueprint("payroll_get_bp", __name__, url_prefix="/payroll")
 @require_auth
 def get_payroll():
     data = request.json
-    employee_id = data.get("employee_id")
-    batch_name = data.get("batch_name")
+    id = data.get("id")
 
-    if not employee_id or not batch_name:
-        current_app.logger.error(f"No employee id {employee_id} and batch name {batch_name}.")
+    if not id:
+        current_app.logger.error(f"No employee id {id}.")
         return jsonify({
-            "code":"NO_EMPLOYEE_ID_OR_BATCH_NAME_PROVIDED",
-            "message":f"Please enter employee id {employee_id} and batch name {batch_name}."
+            "code":"NO_EMPLOYEE_ID_PROVIDED",
+            "message":f"Please enter employee id {id}."
         }), 403
     
-    payroll = get_payroll_crud(employee_id=employee_id, batch_name=batch_name)
+    payroll = get_payroll_crud(id=id)
 
     try:
         if payroll:
@@ -29,10 +28,10 @@ def get_payroll():
             return PayrollResponse(payroll).to_dict()
         
         else:
-            current_app.logger.error(f"Employee id {employee_id} or batch name {batch_name} doesnt exist.")
+            current_app.logger.error(f"Employee id {id} doesnt exist.")
             return jsonify({
-                "code":"EMPLOYEE_ID_OR_BATCH_NAME_DOESNT_EXIST",
-                "message": f"Please try another employee id or batch name, {employee_id}, '{batch_name}' not registered"
+                "code":"EMPLOYEE_ID_DOESNT_EXIST",
+                "message": f"Please try another employee id, {id} not registered"
             }), 403
         
     except IntegrityError as error:

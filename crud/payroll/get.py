@@ -1,14 +1,14 @@
 from flask import current_app
 from database import db
-from utils.utils import get_payroll
+from utils.utils import verify_payroll
 from models import Payroll
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import joinedload
 
 #Get payroll
-def get_payroll_crud(employee_id, batch_name):
+def get_payroll_crud(id):
     try:
-        payroll = get_payroll(employee_id, batch_name)
+        payroll = verify_payroll(id)
         return payroll
     
     except IntegrityError as error:

@@ -1,5 +1,5 @@
 from database import db
-from sqlalchemy import UniqueConstraint,CheckConstraint, Enum
+from sqlalchemy import UniqueConstraint,CheckConstraint
 from sqlalchemy.orm import relationship
 from base import BaseModel
 import enum

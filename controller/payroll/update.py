@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify, current_app
 from crud.payroll.update import update_payroll_crud
-from utils.utils import get_payroll
+from utils.utils import verify_payroll
 from sqlalchemy.exc import IntegrityError
 from schemas.payroll import UpdatePayrollRequest, PayrollResponse
 from auth import require_auth
@@ -28,7 +28,7 @@ def update_payroll():
             "message": f"Required fields for data {data} update are not provided"
         }), 400
     
-    payroll = get_payroll(data.employee_id, data.batch_name)
+    payroll = verify_payroll(data.id)
     if not payroll:
         current_app.logger.error(f"Payroll {payroll} not found.")
         return jsonify({
@@ -37,7 +37,7 @@ def update_payroll():
             }), 404
 
     try:
-        updated_payroll = update_payroll_crud(employee_id = data.employee_id, batch_name = data.batch_name, batch_status = data.batch_status, employee_basic_salary = data.employee_basic_salary, employee_hourly_rate = data.employee_hourly_rate, employee_contract_hours = data.employee_contract_hours, employee_rota_hours = data.employee_rota_hours, employee_worked_hours = data.employee_worked_hours, employee_net_hours = data.employee_net_hours,  employee_lates = data.employee_lates, employee_early = data.employee_early, employee_leaves = data.employee_leaves, employee_score = data.employee_score, total_addition = data.total_addition, total_deduction = data.total_deduction, total_gross = data.total_gross, total_tax = data.total_tax, employee_total_net = data.employee_total_net, total_net_orion = data.total_net_orion)
+        updated_payroll = update_payroll_crud(employee_contract_hours = data.employee_contract_hours, employee_rota_hours = data.employee_rota_hours, employee_worked_hours = data.employee_worked_hours, employee_lates = data.employee_lates, employee_early = data.employee_early, employee_leaves = data.employee_leaves)
         current_app.logger.info(f"Payroll updated {updated_payroll}.")
         return jsonify({
             "code": "PAYROLL_UPDATED",

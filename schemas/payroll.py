@@ -14,7 +14,7 @@ class CreatePayrollRequest:
 
     def is_valid(self):
         #Required fields
-        if not all([self.employee_id, self.company_id, self.batch_name, self.employee_contract_hours, self.employee_rota_hours, self.employee_worked_hours]):
+        if not all([self.employee_id, self.company_id, self.batch_name, self.employee_contract_hours, self.employee_rota_hours, self.employee_worked_hours, self.employee_lates, self.employee_early, self.employee_leaves]):
             return False, "Missing required fields."
         
         #Validate fields values
@@ -36,7 +36,7 @@ class CreatePayrollRequest:
 #Update payroll(class) request
 class UpdatePayrollRequest:
     def __init__(self, data):
-        self.payroll_id = data.get("payroll_id") 
+        self.id = data.get("id") 
         self.employee_contract_hours = data.get("employee_contract_hours")
         self.employee_rota_hours = data.get("employee_rota_hours")
         self.employee_worked_hours = data.get("employee_worked_hours")
@@ -46,7 +46,7 @@ class UpdatePayrollRequest:
 
     def is_valid(self):
 
-        if not self.payroll_id:
+        if not self.id:
             return False, "Payroll id missing. Please provide payroll id."
                
         #Validate fields values
@@ -71,7 +71,7 @@ class UpdatePayrollRequest:
 #Delete payroll(class) request
 class DeletePayrollRequest:
     def __init__(self, data):
-        self.id = data.get("payroll_id")
+        self.id = data.get("id")
     
     def is_valid(self):
         if not (self.id):
@@ -123,12 +123,8 @@ class PayrollResponse:
     
     def is_valid(self):
 
-        if not self.employee_id:
-            return False, "Employee id missing. Please provide employee id."
-
-        if not self.batch_name:
-            return False, "Employee batch name missing. Please provide employee batch name."
-
+        if not self.id:
+            return False, "Payroll id missing. Please provide payroll id."
 
     def to_dict(self):
         return {
